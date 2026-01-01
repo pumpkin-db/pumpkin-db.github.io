@@ -1,589 +1,170 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Blogs Of Pumpkin - Welcome</title><meta name="author" content="pumpkin-db"><meta name="copyright" content="pumpkin-db"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Blogs Of Pumpkin">
 <meta property="og:url" content="http://example.com/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Blogs Of Pumpkin">
 <meta property="og:locale" content="en_US">
-<meta property="article:author" content="John Doe">
+<meta property="og:image" content="http://example.com/img/butterfly-icon.png">
+<meta property="article:author" content="pumpkin-db">
 <meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+<meta name="twitter:image" content="http://example.com/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Blogs Of Pumpkin",
+  "alternateName": [
+    "Welcome",
+    "example.com"
+  ],
+  "url": "http://example.com/"
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
 
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
   
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
     
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
   
-  
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
-
-<meta name="generator" content="Hexo 8.1.1"></head>
-
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Blogs Of Pumpkin',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><meta name="generator" content="Hexo 8.1.1"></head><body><div class="page" id="body-wrap"><header class="full_page" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blogs Of Pumpkin</span></a></span><div id="menus"></div></nav><div id="site-info"><h1 id="site-title">Blogs Of Pumpkin</h1></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/01/01/%E6%95%B0%E6%8D%AE02/" title="Untitled">Untitled</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-01-01T12:47:24.690Z" title="Created 2026-01-01 20:47:24">2026-01-01</time></span></div><div class="content">您的理解完全正确！您对实验流程的规划非常清晰、严谨，完美地体现了“从猜测到验证”的科学研究过程。您将整个过程分为“手动探索”和“系统验证”两个阶段，这是非常专业和高效的做法。 下面我将您的理解梳理成一个更清晰的步骤，并补充一些细节，以确保万无一失。 验证实验步骤规划（基于您的理解）第一阶段：手动探索与感性认识 目标：快速获得对数据集的感性认识，并大致确定一个较优的K值范围。  操作：  选择几个有代表性的K值进行手动测试，例如：K = 1, 3, 5, 10, 15, 20。  对每一个K值，运行KNN算法，并记录以下结果：  整体准确率  每个数字类别（0-9）的精确率和召回率  绘制混淆矩阵，观察错误主要集中在哪些数字之间。      产出：通过对比，您可能会发现当K=3或K=5时，准确率较高。这为您第二阶段的系统实验确定了K值的扫描范围（比如从1到20）。   第二阶段：系统验证与可视化分析 目标：系统地验证第一阶段提出的所有猜测，并用图表清晰地表达结果。  操作：  将K设置为变量，让其在一个合理的范围（如1到20）内变化。  使用循环，让计算机自动完成每个K值下的训练和...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/01/01/work_class/" title="Untitled">Untitled</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-01-01T12:31:57.629Z" title="Created 2026-01-01 20:31:57">2026-01-01</time></span></div><div class="content">基于scikit learn中的对象（模型）实现线性回归（linear regression）预测从这个网站搞了一点数据,url-&gt;https://github.com/Avik-Jain/100-Days-Of-ML-Code/blob/master/datasets/50_Startups.csv 问题：使用研发支出、行政支出、市场支出、公司所在州来预测公司利润一、数据清洗12345import pandas as pd# 读取CSV文件并查看前5行df = pd.read_csv(&#x27;50_Startups.csv&#x27;)print(df.head())     R&amp;D Spend  Administration  Marketing Spend       State     Profit 0  165349.20       136897.80        471784.10    New York  192261.83 1  162597.70       151377.59        443898.53  California  1...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/01/01/My-first-post/" title="My first post">My first post</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-01-01T12:14:01.000Z" title="Created 2026-01-01 20:14:01">2026-01-01</time></span></div><div class="content">好的，基于我们刚才讨论的五个定量评估指标（准确率、精确率、召回率、Fβ分数、混淆矩阵），我们现在可以开始进行“K值影响的理论猜测”。这个猜测过程将更有依据，也更深入。 以下是我们小组可以进行的结构化讨论和猜测。 K值影响的理论猜测我们将从不同指标的角度，系统性地提出关于K值影响的假设。 1. 对整体性能的影响猜测（基于准确率​ 和 Fβ分数）我们猜测，准确率和F1分数​ 随K值变化的曲线很可能呈现出一个倒U形（单峰曲线）。  K值过小（例如K&#x3D;1）：  猜测：准确率和F1分数可能不高或不稳定。  理由：模型过于复杂，对训练数据中的局部噪声和异常点极其敏感。很容易因为一个“奇怪”的邻居而导致分类错误，即过拟合。这会直接导致整体正确率下降。    K值适中：  猜测：存在一个最佳K值范围，使得准确率和F1分数达到最高峰。  理由：适中的K值通过对多个邻居进行“投票”，平滑了数据的局部波动，降低了噪声的影响。这使得模型的泛化能力最强，在未知数据上表现最好。    K值过大（例如K接近训练样本数）：  猜测：准确率和F1分数会逐渐下降。  理由：模型变得过于简单，决策边界过于“...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/01/01/hello-world/" title="Hello World">Hello World</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-01-01T11:52:58.936Z" title="Created 2026-01-01 19:52:58">2026-01-01</time></span></div><div class="content">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new &quot;My New Post&quot;  More info: Writing Run server1$ hexo server  More info: Server Generate static files1$ hexo generate  More info: Generating Deploy to remote sites1$ hexo deploy  More info: Deployment </div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">pumpkin-db</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/pumpkin-db/pumpkin-db.github.io"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog. I will try my best to do this.</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/01/%E6%95%B0%E6%8D%AE02/" title="Untitled">Untitled</a><time datetime="2026-01-01T12:47:24.690Z" title="Created 2026-01-01 20:47:24">2026-01-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/01/work_class/" title="Untitled">Untitled</a><time datetime="2026-01-01T12:31:57.629Z" title="Created 2026-01-01 20:31:57">2026-01-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/01/My-first-post/" title="My first post">My first post</a><time datetime="2026-01-01T12:14:01.000Z" title="Created 2026-01-01 20:14:01">2026-01-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/01/hello-world/" title="Hello World">Hello World</a><time datetime="2026-01-01T11:52:58.936Z" title="Created 2026-01-01 19:52:58">2026-01-01</time></div></div></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>Archives</span>
       
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        
-          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-
-      <div class="outer">
-        <section id="main">
   
-    <article id="post-数据02" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/01/01/%E6%95%B0%E6%8D%AE02/" class="article-date">
-  <time class="dt-published" datetime="2026-01-01T12:47:24.690Z" itemprop="datePublished">2026-01-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="e-content article-entry" itemprop="articleBody">
+    <ul class="card-archive-list">
       
-        <p>您的理解<strong>完全正确</strong>！您对实验流程的规划非常清晰、严谨，完美地体现了“从猜测到验证”的科学研究过程。您将整个过程分为“<strong>手动探索</strong>”和“<strong>系统验证</strong>”两个阶段，这是非常专业和高效的做法。</p>
-<p>下面我将您的理解梳理成一个更清晰的步骤，并补充一些细节，以确保万无一失。</p>
-<h3 id="验证实验步骤规划（基于您的理解）"><a href="#验证实验步骤规划（基于您的理解）" class="headerlink" title="验证实验步骤规划（基于您的理解）"></a>验证实验步骤规划（基于您的理解）</h3><h4 id="第一阶段：手动探索与感性认识"><a href="#第一阶段：手动探索与感性认识" class="headerlink" title="第一阶段：手动探索与感性认识"></a>第一阶段：手动探索与感性认识</h4><ol>
-<li><p><strong>目标</strong>：快速获得对数据集的感性认识，并大致确定一个较优的K值范围。</p>
-</li>
-<li><p><strong>操作</strong>：</p>
-<ul>
-<li><p>选择几个有代表性的K值进行手动测试，例如：<code>K = 1, 3, 5, 10, 15, 20</code>。</p>
-</li>
-<li><p>对每一个K值，运行KNN算法，并记录以下结果：</p>
-<ul>
-<li><p><strong>整体准确率</strong></p>
-</li>
-<li><p><strong>每个数字类别（0-9）的精确率和召回率</strong></p>
-</li>
-<li><p><strong>绘制混淆矩阵</strong>，观察错误主要集中在哪些数字之间。</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>产出</strong>：通过对比，您可能会发现当<code>K=3</code>或<code>K=5</code>时，准确率较高。这为您第二阶段的系统实验确定了K值的扫描范围（比如从1到20）。</p>
-</li>
-</ol>
-<h4 id="第二阶段：系统验证与可视化分析"><a href="#第二阶段：系统验证与可视化分析" class="headerlink" title="第二阶段：系统验证与可视化分析"></a>第二阶段：系统验证与可视化分析</h4><ol>
-<li><p><strong>目标</strong>：系统地验证第一阶段提出的所有猜测，并用图表清晰地表达结果。</p>
-</li>
-<li><p><strong>操作</strong>：</p>
-<ul>
-<li><p>将K设置为变量，让其在一个合理的范围（如1到20）内变化。</p>
-</li>
-<li><p>使用循环，让计算机自动完成每个K值下的训练和评估，并记录所有指标。</p>
-</li>
-<li><p><strong>绘制关键图表</strong>（这是“用合适的方法进行表达”的核心）：</p>
-<ul>
-<li><p><strong>图1：K值与整体指标的关系</strong>。绘制一条曲线，X轴为K值，Y轴为准确率。可以再绘制一条F1分数曲线（例如Macro-F1）作为综合参考。</p>
-</li>
-<li><p><strong>图2：K值与各类别性能的关系（验证权衡）</strong>。选择1-2个有代表性的数字（比如最容易混淆的“5”和“8”），在同一张图上绘制它们随K值变化的<strong>精确率</strong>和<strong>召回率</strong>曲线。这张图将直接验证“精确率和召回率存在权衡”的猜测。</p>
-</li>
-<li><p><strong>图3：关键K点下的混淆矩阵</strong>。选择3个有代表性的K值（如：过小的K&#x3D;1，最佳K&#x3D;5，过大的K&#x3D;15），并排绘制它们的混淆矩阵。通过对比，可以直观验证“错误从分散到集中再到有偏见”的猜测。</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<h4 id="第三阶段：分析总结"><a href="#第三阶段：分析总结" class="headerlink" title="第三阶段：分析总结"></a>第三阶段：分析总结</h4><ol>
-<li><p><strong>目标</strong>：回答核心问题——“K取值对算法执行结果优劣的影响”。</p>
-</li>
-<li><p><strong>操作</strong>：</p>
-<ul>
-<li><p>对照第二阶段绘制的图表，逐一回应第一阶段的猜测。</p>
-</li>
-<li><p><strong>例如</strong>：“我们的猜测1是正确的。如图1所示，准确率随K值变化呈现明显的倒U形曲线，在K&#x3D;5时达到峰值，这表明存在一个最优K值。”</p>
-</li>
-<li><p><strong>例如</strong>：“我们的猜测2关于精确率和召回率的权衡也是正确的。从图2可以看出，随着K值增大，数字‘5’的精确率逐渐上升，但其召回率逐渐下降，这印证了二者之间的权衡关系。”</p>
-</li>
-<li><p>最终，给出一个明确的结论。</p>
-</li>
-</ul>
-</li>
-</ol>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>您的理解完全正确，而且您的实验设计思路非常出色。这个流程不仅能够完成作业要求，更能体现你们对机器学习模型评估方法的深刻理解。</p>
-<p>**请立即开始动手实践吧！**​ 如果在代码实现（例如如何使用<code>sklearn</code>快速计算这些指标，或如何使用<code>matplotlib</code>绘制这些曲线）上遇到任何问题，随时可以提问。祝你们实验顺利！</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>![[屏幕截图 2025-08-14 160351.png]]</p>
-<p><a href=""></a><br><img src="/%22E:%5Cblog%5Csource_posts%5Cimages%5Coutput_29_0.png%22" alt="结果"></p>
-<p>![[03.png]]</p>
-
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/01/">
+            <span class="card-archive-list-date">
+              January 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
       
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2026/01/01/%E6%95%B0%E6%8D%AE02/" data-id="cuidx6PNajFUQBY4uvEtmoJbI" data-title="" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-work_class" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/01/01/work_class/" class="article-date">
-  <time class="dt-published" datetime="2026-01-01T12:31:57.629Z" itemprop="datePublished">2026-01-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="基于scikit-learn中的对象（模型）实现线性回归（linear-regression）预测"><a href="#基于scikit-learn中的对象（模型）实现线性回归（linear-regression）预测" class="headerlink" title="基于scikit learn中的对象（模型）实现线性回归（linear regression）预测"></a>基于scikit learn中的对象（模型）实现线性回归（linear regression）预测</h1><p>从这个网站搞了一点数据,url-&gt;<a target="_blank" rel="noopener" href="https://github.com/Avik-Jain/100-Days-Of-ML-Code/blob/master/datasets/50_Startups.csv">https://github.com/Avik-Jain/100-Days-Of-ML-Code/blob/master/datasets/50_Startups.csv</a></p>
-<h2 id="问题：使用研发支出、行政支出、市场支出、公司所在州来预测公司利润"><a href="#问题：使用研发支出、行政支出、市场支出、公司所在州来预测公司利润" class="headerlink" title="问题：使用研发支出、行政支出、市场支出、公司所在州来预测公司利润"></a>问题：使用研发支出、行政支出、市场支出、公司所在州来预测公司利润</h2><h2 id="一、数据清洗"><a href="#一、数据清洗" class="headerlink" title="一、数据清洗"></a>一、数据清洗</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取CSV文件并查看前5行</span></span><br><span class="line">df = pd.read_csv(<span class="string">&#x27;50_Startups.csv&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(df.head())</span><br></pre></td></tr></table></figure>
-
-<pre><code>   R&amp;D Spend  Administration  Marketing Spend       State     Profit
-0  165349.20       136897.80        471784.10    New York  192261.83
-1  162597.70       151377.59        443898.53  California  191792.06
-2  153441.51       101145.55        407934.54     Florida  191050.39
-3  144372.41       118671.85        383199.62    New York  182901.99
-4  142107.34        91391.77        366168.42     Florida  166187.94
-</code></pre>
-<p>这段数据共有4个特征值，分别是研发支出、行政支出、市场支出、公司所在州<br>前三项没有问题，问题是公司所在州，这是一个字符串，不能直接用于线性回归，所以要想办法把它变为数值数据，或者干脆舍去这一列</p>
-<p>不过现在我还不想直接放弃这个数据，先尝试转换一下，或许等下能用到，思路是这样，再新建三个列，名字格式是State_州名，如果是这个州，数值就为1，反之为0</p>
-<p>改的过程就直接让AI写了一段脚本</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取数据</span></span><br><span class="line">df = pd.read_csv(<span class="string">&#x27;50_Startups.csv&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;原始数据信息:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;State列: <span class="subst">&#123;df[<span class="string">&#x27;State&#x27;</span>].unique()&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成所有3个州列，且转换为0/1数值</span></span><br><span class="line">df_encoded = pd.get_dummies(df, columns=[<span class="string">&#x27;State&#x27;</span>], drop_first=<span class="literal">False</span>, dtype=<span class="built_in">int</span>, prefix=<span class="string">&#x27;State&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;更改后的列名:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(df_encoded.columns.tolist())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存为新的CSV文件</span></span><br><span class="line">df_encoded.to_csv(<span class="string">&#x27;50_Startups_new.csv&#x27;</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>原始数据信息:
-State列: [&#39;New York&#39; &#39;California&#39; &#39;Florida&#39;]
-更改后的列名:
-[&#39;R&amp;D Spend&#39;, &#39;Administration&#39;, &#39;Marketing Spend&#39;, &#39;Profit&#39;, &#39;State_California&#39;, &#39;State_Florida&#39;, &#39;State_New York&#39;]
-</code></pre>
-<p>查看一下转换效果</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df = pd.read_csv(<span class="string">&#x27;50_Startups_new.csv&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(df.head())</span><br></pre></td></tr></table></figure>
-
-<pre><code>   R&amp;D Spend  Administration  Marketing Spend     Profit  State_California  \
-0  165349.20       136897.80        471784.10  192261.83                 0   
-1  162597.70       151377.59        443898.53  191792.06                 1   
-2  153441.51       101145.55        407934.54  191050.39                 0   
-3  144372.41       118671.85        383199.62  182901.99                 0   
-4  142107.34        91391.77        366168.42  166187.94                 0   
-
-   State_Florida  State_New York  
-0              0               1  
-1              0               0  
-2              1               0  
-3              0               1  
-4              1               0  
-</code></pre>
-<p>可以看到是预期的效果，现在数据就准备好了</p>
-<h2 id="二、使用scikit-learn中的模型实现线性回归"><a href="#二、使用scikit-learn中的模型实现线性回归" class="headerlink" title="二、使用scikit learn中的模型实现线性回归"></a>二、使用scikit learn中的模型实现线性回归</h2><p>接下来就直接使用模型进行线性回归预测</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分离特征和目标变量</span></span><br><span class="line">X = df[[<span class="string">&#x27;R&amp;D Spend&#x27;</span>, <span class="string">&#x27;Administration&#x27;</span>, <span class="string">&#x27;Marketing Spend&#x27;</span>, <span class="string">&#x27;State_California&#x27;</span>, <span class="string">&#x27;State_Florida&#x27;</span>, <span class="string">&#x27;State_New York&#x27;</span>]]</span><br><span class="line">y = df[<span class="string">&#x27;Profit&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 划分训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.3</span>, random_state=<span class="number">114514</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并训练线性回归模型</span></span><br><span class="line">model = LinearRegression()</span><br><span class="line">model.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;训练完成&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;使用的特征数量: <span class="subst">&#123;X.shape[<span class="number">1</span>]&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>训练完成
-使用的特征数量: 6
-</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用模型进行预测</span></span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建对比图</span></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>, <span class="number">5</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 子图1：预测值 vs 真实值散点图</span></span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">plt.scatter(y_test, y_pred, alpha=<span class="number">0.7</span>, color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">plt.plot([y_test.<span class="built_in">min</span>(), y_test.<span class="built_in">max</span>()], [y_test.<span class="built_in">min</span>(), y_test.<span class="built_in">max</span>()], <span class="string">&#x27;r--&#x27;</span>, lw=<span class="number">2</span>, label=<span class="string">&#x27;Predicted_line&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Actual Profit&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Predicted Profit&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Predicted vs Actual&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 子图2：残差图（评估误差分布）</span></span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">residuals = y_test - y_pred</span><br><span class="line">plt.scatter(y_pred, residuals, alpha=<span class="number">0.7</span>, color=<span class="string">&#x27;green&#x27;</span>)</span><br><span class="line">plt.axhline(y=<span class="number">0</span>, color=<span class="string">&#x27;r&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, lw=<span class="number">2</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Predicted Profit&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Residuals&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Residuals of Predicted Profit&#x27;</span>)</span><br><span class="line">plt.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="/output_15_0.png" alt="png"></p>
-<p>从两个图像上可以看到，只有一个点的残差非常大，接近-40000，其他的点都还好，下面再计算均方误差、均方根误差、平均绝对误差、决定系数共四个量来进一步评估结果</p>
-<p>均方误差MSE</p>
-<p>均方根误差RMSE: 衡量预测值与真实值的平均偏差，越小越好</p>
-<p>平均绝对误差MAE: 预测误差的绝对值平均，越小越好</p>
-<p>决定系数 (R²)：模型解释的方差比例，越接近1越好</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, r2_score, mean_absolute_error</span><br><span class="line"><span class="comment"># 计算多种评估指标</span></span><br><span class="line">mse = mean_squared_error(y_test, y_pred)</span><br><span class="line">rmse = np.sqrt(mse)</span><br><span class="line">mae = mean_absolute_error(y_test, y_pred)</span><br><span class="line">r2 = r2_score(y_test, y_pred)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出评估结果</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;均方误差 (MSE): <span class="subst">&#123;mse:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;均方根误差 (RMSE): <span class="subst">&#123;rmse:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;平均绝对误差 (MAE): <span class="subst">&#123;mae:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;决定系数 (R²): <span class="subst">&#123;r2:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>均方误差 (MSE): 158062577.80
-均方根误差 (RMSE): 12572.29
-平均绝对误差 (MAE): 8389.94
-决定系数 (R²): 0.8904
-</code></pre>
-<p> 平均绝对误差是8389.94，是说平均每个公司利润预测和实际的差值是8389.94，利润的数据从14681.4到192261.83，其中有40条数据在80000以上，对每个数据的误差大部分在10%以下，所以直观上看预测效果也是不错的，决定系数是0.8904，比较接近1了，看图像也是线性的，综上可以认为这个线性模型是合理的。</p>
-<h2 id="三、一些额外的工作"><a href="#三、一些额外的工作" class="headerlink" title="三、一些额外的工作"></a>三、一些额外的工作</h2><p>一般认为研发支出和对公司来说是很重要的，所以我想用研发支出来预测利润，但是数据中有些研发支出为0的数据，肯定要删去，但是这样估计预测的效果会很差，所以我把市场支出数据也加了进来，二者共同预测</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df = pd.read_csv(<span class="string">&#x27;50_Startups_new.csv&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(df.tail())</span><br></pre></td></tr></table></figure>
-
-<pre><code>    R&amp;D Spend  Administration  Marketing Spend    Profit  State_California  \
-45    1000.23       124153.04          1903.93  64926.08                 0   
-46    1315.46       115816.21        297114.46  49490.75                 0   
-47       0.00       135426.92             0.00  42559.73                 1   
-48     542.05        51743.15             0.00  35673.41                 0   
-49       0.00       116983.80         45173.06  14681.40                 1   
-
-    State_Florida  State_New York  
-45              0               1  
-46              1               0  
-47              0               0  
-48              0               1  
-49              0               0  
-</code></pre>
-<p>还是按照之前的步骤，这次就直接打包成一块代码了，直接去看结果</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, r2_score</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 读取和清洗数据</span></span><br><span class="line">df = pd.read_csv(<span class="string">&#x27;50_Startups_new.csv&#x27;</span>)</span><br><span class="line">df_cleaned = df[(df[<span class="string">&#x27;R&amp;D Spend&#x27;</span>] != <span class="number">0</span>) &amp; (df[<span class="string">&#x27;Marketing Spend&#x27;</span>] != <span class="number">0</span>)]</span><br><span class="line">df_cleaned.to_csv(<span class="string">&#x27;50_Startups_new2.csv&#x27;</span>, index=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 建模和预测</span></span><br><span class="line">X = df_cleaned[[<span class="string">&#x27;R&amp;D Spend&#x27;</span>, <span class="string">&#x27;Marketing Spend&#x27;</span>]]</span><br><span class="line">y = df_cleaned[<span class="string">&#x27;Profit&#x27;</span>]</span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">114514</span>)</span><br><span class="line"></span><br><span class="line">model = LinearRegression()</span><br><span class="line">model.fit(X_train, y_train)</span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;数据清洗: 从 <span class="subst">&#123;<span class="built_in">len</span>(df)&#125;</span> 行减少到 <span class="subst">&#123;<span class="built_in">len</span>(df_cleaned)&#125;</span> 行&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;R²: R² = <span class="subst">&#123;r2_score(y_test, y_pred):<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;特征系数: R&amp;D Spend: <span class="subst">&#123;model.coef_[<span class="number">0</span>]:<span class="number">.4</span>f&#125;</span>, Marketing Spend: <span class="subst">&#123;model.coef_[<span class="number">1</span>]:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n预测结果示例:&quot;</span>)</span><br><span class="line">results_df = pd.DataFrame(&#123;</span><br><span class="line">    <span class="string">&#x27;实际利润&#x27;</span>: y_test, </span><br><span class="line">    <span class="string">&#x27;预测利润&#x27;</span>: y_pred,</span><br><span class="line">    <span class="string">&#x27;误差&#x27;</span>: y_test - y_pred</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">print</span>(results_df.tail())</span><br><span class="line">mae = mean_absolute_error(y_test, y_pred)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;平均绝对误差 (MAE) 为: <span class="subst">&#123;mae:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>数据清洗: 从 50 行减少到 46 行
-R²: R² = 0.9513
-特征系数: R&amp;D Spend: 0.7419, Marketing Spend: 0.0317
-
-预测结果示例:
-         实际利润           预测利润            误差
-35   96479.51   92276.247854   4203.262146
-8   152211.77  150925.834267   1285.935733
-18  124266.90  129036.190904  -4769.290904
-46   49490.75   62014.728523 -12523.978523
-24  108552.04  113241.046370  -4689.006370
-平均绝对误差 (MAE) 为: 5325.84
-</code></pre>
-<p>从误差上看结果是不错的，小了很多</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, r2_score</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用模型进行预测</span></span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建预测值 vs 真实值散点图</span></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>, <span class="number">5</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 子图1：预测值 vs 真实值散点图</span></span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">plt.scatter(y_test, y_pred, alpha=<span class="number">0.7</span>, color=<span class="string">&#x27;blue&#x27;</span>, label=<span class="string">&#x27;Data Points&#x27;</span>)</span><br><span class="line">plt.plot([y_test.<span class="built_in">min</span>(), y_test.<span class="built_in">max</span>()], [y_test.<span class="built_in">min</span>(), y_test.<span class="built_in">max</span>()], </span><br><span class="line">         color=<span class="string">&#x27;red&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, linewidth=<span class="number">2</span>, label=<span class="string">&#x27;Perfect Prediction&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.xlabel(<span class="string">&#x27;True Values (Profit)&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Predicted Values (Profit)&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Predicted vs True Values&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算评估指标</span></span><br><span class="line">mse = mean_squared_error(y_test, y_pred)</span><br><span class="line">rmse = np.sqrt(mse)</span><br><span class="line">r2 = r2_score(y_test, y_pred)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在图上添加评估指标</span></span><br><span class="line">plt.text(<span class="number">0.05</span>, <span class="number">0.95</span>, <span class="string">f&#x27;R² = <span class="subst">&#123;r2:<span class="number">.4</span>f&#125;</span>\nRMSE = <span class="subst">&#123;rmse:<span class="number">.2</span>f&#125;</span>&#x27;</span>, </span><br><span class="line">         transform=plt.gca().transAxes, verticalalignment=<span class="string">&#x27;top&#x27;</span>,</span><br><span class="line">         bbox=<span class="built_in">dict</span>(boxstyle=<span class="string">&#x27;round&#x27;</span>, facecolor=<span class="string">&#x27;wheat&#x27;</span>, alpha=<span class="number">0.8</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 子图2：残差图</span></span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">residuals = y_test - y_pred</span><br><span class="line">plt.scatter(y_pred, residuals, alpha=<span class="number">0.7</span>, color=<span class="string">&#x27;green&#x27;</span>)</span><br><span class="line">plt.axhline(y=<span class="number">0</span>, color=<span class="string">&#x27;red&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, linewidth=<span class="number">2</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Predicted Values&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Residuals&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Residual Plot&#x27;</span>)</span><br><span class="line">plt.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 调整布局并显示</span></span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="/images%5Coutput_29_0.png" alt="结果"></p>
-<p>R²到了0.95，比上一个更好，从图像上看也是线性的，看来研发支出、市场支出要更好一些，这次的任务就到这里了</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2026/01/01/work_class/" data-id="cuidWZwUhPwC5qGeRzfehxQn8" data-title="" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-My-first-post" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/01/01/My-first-post/" class="article-date">
-  <time class="dt-published" datetime="2026-01-01T12:14:01.000Z" itemprop="datePublished">2026-01-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2026/01/01/My-first-post/">My first post</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>好的，基于我们刚才讨论的五个定量评估指标（准确率、精确率、召回率、Fβ分数、混淆矩阵），我们现在可以开始进行“K值影响的理论猜测”。这个猜测过程将更有依据，也更深入。</p>
-<p>以下是我们小组可以进行的结构化讨论和猜测。</p>
-<h3 id="K值影响的理论猜测"><a href="#K值影响的理论猜测" class="headerlink" title="K值影响的理论猜测"></a>K值影响的理论猜测</h3><p>我们将从不同指标的角度，系统性地提出关于K值影响的假设。</p>
-<h4 id="1-对整体性能的影响猜测（基于准确率​-和-Fβ分数）"><a href="#1-对整体性能的影响猜测（基于准确率​-和-Fβ分数）" class="headerlink" title="1. 对整体性能的影响猜测（基于准确率​ 和 Fβ分数）"></a>1. 对整体性能的影响猜测（基于<strong>准确率</strong>​ 和 <strong>Fβ分数</strong>）</h4><p>我们猜测，<strong>准确率</strong>和<strong>F1分数</strong>​ 随K值变化的曲线很可能呈现出一个<strong>倒U形</strong>（单峰曲线）。</p>
-<ul>
-<li><p><strong>K值过小（例如K&#x3D;1）</strong>：</p>
-<ul>
-<li><p><strong>猜测</strong>：准确率和F1分数可能<strong>不高或不稳定</strong>。</p>
-</li>
-<li><p><strong>理由</strong>：模型过于复杂，对训练数据中的局部噪声和异常点极其敏感。很容易因为一个“奇怪”的邻居而导致分类错误，即<strong>过拟合</strong>。这会直接导致整体正确率下降。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>K值适中</strong>：</p>
-<ul>
-<li><p><strong>猜测</strong>：存在一个<strong>最佳K值范围</strong>，使得准确率和F1分数达到最高峰。</p>
-</li>
-<li><p><strong>理由</strong>：适中的K值通过对多个邻居进行“投票”，平滑了数据的局部波动，降低了噪声的影响。这使得模型的<strong>泛化能力</strong>最强，在未知数据上表现最好。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>K值过大（例如K接近训练样本数）</strong>：</p>
-<ul>
-<li><p><strong>猜测</strong>：准确率和F1分数会<strong>逐渐下降</strong>。</p>
-</li>
-<li><p><strong>理由</strong>：模型变得过于简单，决策边界过于“平滑”，可能无法捕捉数据中重要的局部模式。例如，某个数字的弯曲特征可能被忽略，导致<strong>欠拟合</strong>。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-对分类“质量”与“查全率”的影响猜测（基于精确率​-与-召回率​-的权衡）"><a href="#2-对分类“质量”与“查全率”的影响猜测（基于精确率​-与-召回率​-的权衡）" class="headerlink" title="2. 对分类“质量”与“查全率”的影响猜测（基于精确率​ 与 召回率​ 的权衡）"></a>2. 对分类“质量”与“查全率”的影响猜测（基于<strong>精确率</strong>​ 与 <strong>召回率</strong>​ 的权衡）</h4><p>我们猜测，K值的变化会引发<strong>精确率</strong>和<strong>召回率</strong>之间典型的**此消彼长（Trade-off）**​ 关系。</p>
-<ul>
-<li><p><strong>K值增大时</strong>：</p>
-<ul>
-<li><p><strong>精确率猜测</strong>：可能<strong>逐渐升高</strong>。</p>
-</li>
-<li><p><strong>理由</strong>：模型做出预测时需要更多邻居的一致同意，因此预测行为更“保守”。只有当某个区域样本密度很高、类别很纯时，模型才会判定为该类。这意味着，<strong>模型一旦预测为某个数字，这个判断的可信度很高</strong>（例如，它说这是“5”的时候，很可能真的是“5”）。这对应于<strong>减少误判（FP）</strong>。</p>
-</li>
-<li><p><strong>召回率猜测</strong>：可能<strong>逐渐降低</strong>。</p>
-</li>
-<li><p><strong>理由</strong>：正因为模型变保守了，一些处于类别边界、形状不规则的真实样本（例如，一个写得有点歪的“5”），可能因为周围有少数其他类的样本而无法被成功识别。这导致了<strong>漏检（FN）增加</strong>。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>K值减小时</strong>：</p>
-<ul>
-<li><strong>猜测</strong>：情况相反。模型更“激进”，召回率可能上升（能找出更多真正的目标），但精确率会下降（更容易误判）。</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-对错误模式的影响猜测（基于混淆矩阵）"><a href="#3-对错误模式的影响猜测（基于混淆矩阵）" class="headerlink" title="3. 对错误模式的影响猜测（基于混淆矩阵）"></a>3. 对错误模式的影响猜测（基于<strong>混淆矩阵</strong>）</h4><p>我们猜测，混淆矩阵的形态会随K值发生系统性变化。</p>
-<ul>
-<li><p><strong>K值过小时</strong>：</p>
-<ul>
-<li><p><strong>猜测</strong>：混淆矩阵中的错误会显得<strong>分散和随机</strong>。</p>
-</li>
-<li><p><strong>理由</strong>：因为模型对局部噪声敏感，错误可能出现在任何形状相似的数字之间（如“3”和“8”，“5”和“6”，“7”和“1”等），没有明显的规律。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>K值适中时</strong>：</p>
-<ul>
-<li><p><strong>猜测</strong>：错误会<strong>集中在少数几个真正容易混淆的类别</strong>上。</p>
-</li>
-<li><p><strong>理由</strong>：模型忽略了次要的局部波动，只会将那些本质特征非常相似的数字混淆（例如，主要混淆都发生在“3”和“8”之间）。这说明模型学到了更本质的特征。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>K值过大时</strong>：</p>
-<ul>
-<li><p><strong>猜测</strong>：错误可能会<strong>呈现出某种“偏见”</strong>。</p>
-</li>
-<li><p><strong>理由</strong>：由于模型过于平滑，它可能会倾向于将边界样本预测为<strong>样本数量多的类别</strong>（如果各类别样本数不均），或者预测为在特征空间中占主导地位的类别。混淆矩阵可能会显示，某些少数类别（如数字“0”）的样本大量被误判为另一个类别。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="总结：预测的关系曲线形状"><a href="#总结：预测的关系曲线形状" class="headerlink" title="总结：预测的关系曲线形状"></a>总结：预测的关系曲线形状</h3><table>
-<thead>
-<tr>
-<th>指标</th>
-<th>预测的曲线形状（随K值增大）</th>
-<th>主要原因</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>准确率 &#x2F; F1分数</strong>​</td>
-<td><strong>倒U形曲线</strong>​</td>
-<td>经历从过拟合到最佳泛化，再到欠拟合的过程。</td>
-</tr>
-<tr>
-<td><strong>精确率</strong>​</td>
-<td><strong>可能逐渐上升并趋于平稳</strong>​</td>
-<td>模型预测越来越保守，误判减少。</td>
-</tr>
-<tr>
-<td><strong>召回率</strong>​</td>
-<td><strong>可能逐渐下降</strong>​</td>
-<td>模型越来越保守，漏检增加。</td>
-</tr>
-<tr>
-<td><strong>混淆矩阵</strong>​</td>
-<td><strong>错误从分散 → 集中 → 有偏见</strong>​</td>
-<td>从学习噪声，到学习本质特征，再到过度简化。</td>
-</tr>
-</tbody></table>
-<p>这些猜测构成了我们接下来的实验需要验证的假设。我们的验证过程，就是通过实际运行KNN算法，计算不同K值下的这些指标，并绘制图表，来检验以上哪些猜测是正确的。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2026/01/01/My-first-post/" data-id="cuidXkmGtmrdQNBKkWxg3ZwBq" data-title="My first post" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/01/01/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2026-01-01T11:52:58.936Z" itemprop="datePublished">2026-01-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2026/01/01/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2026/01/01/hello-world/" data-id="cuidvucDsHHtkkTokdY7W_tPF" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/01/">January 2026</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2026/01/01/%E6%95%B0%E6%8D%AE02/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2026/01/01/work_class/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2026/01/01/My-first-post/">My first post</a>
-          </li>
-        
-          <li>
-            <a href="/2026/01/01/hello-world/">Hello World</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2026 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.6.4.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
-</html>
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Website Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article Count :</div><div class="item-count">4</div></div><div class="webinfo-item"><div class="item-name">Unique Visitors :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Page Views :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-01-01T14:50:26.711Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By pumpkin-db</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
