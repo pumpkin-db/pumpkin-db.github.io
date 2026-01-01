@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="基于scikit learn中的对象（模型）实现线性回归（linear regression）预测从这个网站搞了一点数据,url-&gt;https:&#x2F;&#x2F;github.com&#x2F;Avik-Jain&#x2F;100-Days-Of-ML-Code&#x2F;blob&#x2F;master&#x2F;datasets&#x2F;50_Startups.csv 问题：使用研发支出、行政支出、市场支出、公司所在州来预测公司利润一、数据清洗12345im">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2026/01/01/work_class/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="基于scikit learn中的对象（模型）实现线性回归（linear regression）预测从这个网站搞了一点数据,url-&gt;https:&#x2F;&#x2F;github.com&#x2F;Avik-Jain&#x2F;100-Days-Of-ML-Code&#x2F;blob&#x2F;master&#x2F;datasets&#x2F;50_Startups.csv 问题：使用研发支出、行政支出、市场支出、公司所在州来预测公司利润一、数据清洗12345im">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/output_15_0.png">
+<meta property="og:image" content="http://example.com/images%5Coutput_29_0.png">
+<meta property="article:published_time" content="2026-01-01T12:31:57.629Z">
+<meta property="article:modified_time" content="2026-01-01T12:42:16.158Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/output_15_0.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-work_class" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/01/01/work_class/" class="article-date">
+  <time class="dt-published" datetime="2026-01-01T12:31:57.629Z" itemprop="datePublished">2026-01-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="基于scikit-learn中的对象（模型）实现线性回归（linear-regression）预测"><a href="#基于scikit-learn中的对象（模型）实现线性回归（linear-regression）预测" class="headerlink" title="基于scikit learn中的对象（模型）实现线性回归（linear regression）预测"></a>基于scikit learn中的对象（模型）实现线性回归（linear regression）预测</h1><p>从这个网站搞了一点数据,url-&gt;<a target="_blank" rel="noopener" href="https://github.com/Avik-Jain/100-Days-Of-ML-Code/blob/master/datasets/50_Startups.csv">https://github.com/Avik-Jain/100-Days-Of-ML-Code/blob/master/datasets/50_Startups.csv</a></p>
+<h2 id="问题：使用研发支出、行政支出、市场支出、公司所在州来预测公司利润"><a href="#问题：使用研发支出、行政支出、市场支出、公司所在州来预测公司利润" class="headerlink" title="问题：使用研发支出、行政支出、市场支出、公司所在州来预测公司利润"></a>问题：使用研发支出、行政支出、市场支出、公司所在州来预测公司利润</h2><h2 id="一、数据清洗"><a href="#一、数据清洗" class="headerlink" title="一、数据清洗"></a>一、数据清洗</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取CSV文件并查看前5行</span></span><br><span class="line">df = pd.read_csv(<span class="string">&#x27;50_Startups.csv&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(df.head())</span><br></pre></td></tr></table></figure>
+
+<pre><code>   R&amp;D Spend  Administration  Marketing Spend       State     Profit
+0  165349.20       136897.80        471784.10    New York  192261.83
+1  162597.70       151377.59        443898.53  California  191792.06
+2  153441.51       101145.55        407934.54     Florida  191050.39
+3  144372.41       118671.85        383199.62    New York  182901.99
+4  142107.34        91391.77        366168.42     Florida  166187.94
+</code></pre>
+<p>这段数据共有4个特征值，分别是研发支出、行政支出、市场支出、公司所在州<br>前三项没有问题，问题是公司所在州，这是一个字符串，不能直接用于线性回归，所以要想办法把它变为数值数据，或者干脆舍去这一列</p>
+<p>不过现在我还不想直接放弃这个数据，先尝试转换一下，或许等下能用到，思路是这样，再新建三个列，名字格式是State_州名，如果是这个州，数值就为1，反之为0</p>
+<p>改的过程就直接让AI写了一段脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取数据</span></span><br><span class="line">df = pd.read_csv(<span class="string">&#x27;50_Startups.csv&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;原始数据信息:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;State列: <span class="subst">&#123;df[<span class="string">&#x27;State&#x27;</span>].unique()&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成所有3个州列，且转换为0/1数值</span></span><br><span class="line">df_encoded = pd.get_dummies(df, columns=[<span class="string">&#x27;State&#x27;</span>], drop_first=<span class="literal">False</span>, dtype=<span class="built_in">int</span>, prefix=<span class="string">&#x27;State&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;更改后的列名:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(df_encoded.columns.tolist())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存为新的CSV文件</span></span><br><span class="line">df_encoded.to_csv(<span class="string">&#x27;50_Startups_new.csv&#x27;</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>原始数据信息:
+State列: [&#39;New York&#39; &#39;California&#39; &#39;Florida&#39;]
+更改后的列名:
+[&#39;R&amp;D Spend&#39;, &#39;Administration&#39;, &#39;Marketing Spend&#39;, &#39;Profit&#39;, &#39;State_California&#39;, &#39;State_Florida&#39;, &#39;State_New York&#39;]
+</code></pre>
+<p>查看一下转换效果</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df = pd.read_csv(<span class="string">&#x27;50_Startups_new.csv&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(df.head())</span><br></pre></td></tr></table></figure>
+
+<pre><code>   R&amp;D Spend  Administration  Marketing Spend     Profit  State_California  \
+0  165349.20       136897.80        471784.10  192261.83                 0   
+1  162597.70       151377.59        443898.53  191792.06                 1   
+2  153441.51       101145.55        407934.54  191050.39                 0   
+3  144372.41       118671.85        383199.62  182901.99                 0   
+4  142107.34        91391.77        366168.42  166187.94                 0   
+
+   State_Florida  State_New York  
+0              0               1  
+1              0               0  
+2              1               0  
+3              0               1  
+4              1               0  
+</code></pre>
+<p>可以看到是预期的效果，现在数据就准备好了</p>
+<h2 id="二、使用scikit-learn中的模型实现线性回归"><a href="#二、使用scikit-learn中的模型实现线性回归" class="headerlink" title="二、使用scikit learn中的模型实现线性回归"></a>二、使用scikit learn中的模型实现线性回归</h2><p>接下来就直接使用模型进行线性回归预测</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分离特征和目标变量</span></span><br><span class="line">X = df[[<span class="string">&#x27;R&amp;D Spend&#x27;</span>, <span class="string">&#x27;Administration&#x27;</span>, <span class="string">&#x27;Marketing Spend&#x27;</span>, <span class="string">&#x27;State_California&#x27;</span>, <span class="string">&#x27;State_Florida&#x27;</span>, <span class="string">&#x27;State_New York&#x27;</span>]]</span><br><span class="line">y = df[<span class="string">&#x27;Profit&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 划分训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.3</span>, random_state=<span class="number">114514</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并训练线性回归模型</span></span><br><span class="line">model = LinearRegression()</span><br><span class="line">model.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;训练完成&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;使用的特征数量: <span class="subst">&#123;X.shape[<span class="number">1</span>]&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>训练完成
+使用的特征数量: 6
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用模型进行预测</span></span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建对比图</span></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>, <span class="number">5</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 子图1：预测值 vs 真实值散点图</span></span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">plt.scatter(y_test, y_pred, alpha=<span class="number">0.7</span>, color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">plt.plot([y_test.<span class="built_in">min</span>(), y_test.<span class="built_in">max</span>()], [y_test.<span class="built_in">min</span>(), y_test.<span class="built_in">max</span>()], <span class="string">&#x27;r--&#x27;</span>, lw=<span class="number">2</span>, label=<span class="string">&#x27;Predicted_line&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Actual Profit&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Predicted Profit&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Predicted vs Actual&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 子图2：残差图（评估误差分布）</span></span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">residuals = y_test - y_pred</span><br><span class="line">plt.scatter(y_pred, residuals, alpha=<span class="number">0.7</span>, color=<span class="string">&#x27;green&#x27;</span>)</span><br><span class="line">plt.axhline(y=<span class="number">0</span>, color=<span class="string">&#x27;r&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, lw=<span class="number">2</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Predicted Profit&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Residuals&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Residuals of Predicted Profit&#x27;</span>)</span><br><span class="line">plt.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/output_15_0.png" alt="png"></p>
+<p>从两个图像上可以看到，只有一个点的残差非常大，接近-40000，其他的点都还好，下面再计算均方误差、均方根误差、平均绝对误差、决定系数共四个量来进一步评估结果</p>
+<p>均方误差MSE</p>
+<p>均方根误差RMSE: 衡量预测值与真实值的平均偏差，越小越好</p>
+<p>平均绝对误差MAE: 预测误差的绝对值平均，越小越好</p>
+<p>决定系数 (R²)：模型解释的方差比例，越接近1越好</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, r2_score, mean_absolute_error</span><br><span class="line"><span class="comment"># 计算多种评估指标</span></span><br><span class="line">mse = mean_squared_error(y_test, y_pred)</span><br><span class="line">rmse = np.sqrt(mse)</span><br><span class="line">mae = mean_absolute_error(y_test, y_pred)</span><br><span class="line">r2 = r2_score(y_test, y_pred)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出评估结果</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;均方误差 (MSE): <span class="subst">&#123;mse:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;均方根误差 (RMSE): <span class="subst">&#123;rmse:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;平均绝对误差 (MAE): <span class="subst">&#123;mae:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;决定系数 (R²): <span class="subst">&#123;r2:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>均方误差 (MSE): 158062577.80
+均方根误差 (RMSE): 12572.29
+平均绝对误差 (MAE): 8389.94
+决定系数 (R²): 0.8904
+</code></pre>
+<p> 平均绝对误差是8389.94，是说平均每个公司利润预测和实际的差值是8389.94，利润的数据从14681.4到192261.83，其中有40条数据在80000以上，对每个数据的误差大部分在10%以下，所以直观上看预测效果也是不错的，决定系数是0.8904，比较接近1了，看图像也是线性的，综上可以认为这个线性模型是合理的。</p>
+<h2 id="三、一些额外的工作"><a href="#三、一些额外的工作" class="headerlink" title="三、一些额外的工作"></a>三、一些额外的工作</h2><p>一般认为研发支出和对公司来说是很重要的，所以我想用研发支出来预测利润，但是数据中有些研发支出为0的数据，肯定要删去，但是这样估计预测的效果会很差，所以我把市场支出数据也加了进来，二者共同预测</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df = pd.read_csv(<span class="string">&#x27;50_Startups_new.csv&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(df.tail())</span><br></pre></td></tr></table></figure>
+
+<pre><code>    R&amp;D Spend  Administration  Marketing Spend    Profit  State_California  \
+45    1000.23       124153.04          1903.93  64926.08                 0   
+46    1315.46       115816.21        297114.46  49490.75                 0   
+47       0.00       135426.92             0.00  42559.73                 1   
+48     542.05        51743.15             0.00  35673.41                 0   
+49       0.00       116983.80         45173.06  14681.40                 1   
+
+    State_Florida  State_New York  
+45              0               1  
+46              1               0  
+47              0               0  
+48              0               1  
+49              0               0  
+</code></pre>
+<p>还是按照之前的步骤，这次就直接打包成一块代码了，直接去看结果</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, r2_score</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 读取和清洗数据</span></span><br><span class="line">df = pd.read_csv(<span class="string">&#x27;50_Startups_new.csv&#x27;</span>)</span><br><span class="line">df_cleaned = df[(df[<span class="string">&#x27;R&amp;D Spend&#x27;</span>] != <span class="number">0</span>) &amp; (df[<span class="string">&#x27;Marketing Spend&#x27;</span>] != <span class="number">0</span>)]</span><br><span class="line">df_cleaned.to_csv(<span class="string">&#x27;50_Startups_new2.csv&#x27;</span>, index=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 建模和预测</span></span><br><span class="line">X = df_cleaned[[<span class="string">&#x27;R&amp;D Spend&#x27;</span>, <span class="string">&#x27;Marketing Spend&#x27;</span>]]</span><br><span class="line">y = df_cleaned[<span class="string">&#x27;Profit&#x27;</span>]</span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">114514</span>)</span><br><span class="line"></span><br><span class="line">model = LinearRegression()</span><br><span class="line">model.fit(X_train, y_train)</span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;数据清洗: 从 <span class="subst">&#123;<span class="built_in">len</span>(df)&#125;</span> 行减少到 <span class="subst">&#123;<span class="built_in">len</span>(df_cleaned)&#125;</span> 行&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;R²: R² = <span class="subst">&#123;r2_score(y_test, y_pred):<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;特征系数: R&amp;D Spend: <span class="subst">&#123;model.coef_[<span class="number">0</span>]:<span class="number">.4</span>f&#125;</span>, Marketing Spend: <span class="subst">&#123;model.coef_[<span class="number">1</span>]:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n预测结果示例:&quot;</span>)</span><br><span class="line">results_df = pd.DataFrame(&#123;</span><br><span class="line">    <span class="string">&#x27;实际利润&#x27;</span>: y_test, </span><br><span class="line">    <span class="string">&#x27;预测利润&#x27;</span>: y_pred,</span><br><span class="line">    <span class="string">&#x27;误差&#x27;</span>: y_test - y_pred</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">print</span>(results_df.tail())</span><br><span class="line">mae = mean_absolute_error(y_test, y_pred)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;平均绝对误差 (MAE) 为: <span class="subst">&#123;mae:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>数据清洗: 从 50 行减少到 46 行
+R²: R² = 0.9513
+特征系数: R&amp;D Spend: 0.7419, Marketing Spend: 0.0317
+
+预测结果示例:
+         实际利润           预测利润            误差
+35   96479.51   92276.247854   4203.262146
+8   152211.77  150925.834267   1285.935733
+18  124266.90  129036.190904  -4769.290904
+46   49490.75   62014.728523 -12523.978523
+24  108552.04  113241.046370  -4689.006370
+平均绝对误差 (MAE) 为: 5325.84
+</code></pre>
+<p>从误差上看结果是不错的，小了很多</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, r2_score</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用模型进行预测</span></span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建预测值 vs 真实值散点图</span></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>, <span class="number">5</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 子图1：预测值 vs 真实值散点图</span></span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">plt.scatter(y_test, y_pred, alpha=<span class="number">0.7</span>, color=<span class="string">&#x27;blue&#x27;</span>, label=<span class="string">&#x27;Data Points&#x27;</span>)</span><br><span class="line">plt.plot([y_test.<span class="built_in">min</span>(), y_test.<span class="built_in">max</span>()], [y_test.<span class="built_in">min</span>(), y_test.<span class="built_in">max</span>()], </span><br><span class="line">         color=<span class="string">&#x27;red&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, linewidth=<span class="number">2</span>, label=<span class="string">&#x27;Perfect Prediction&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.xlabel(<span class="string">&#x27;True Values (Profit)&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Predicted Values (Profit)&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Predicted vs True Values&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算评估指标</span></span><br><span class="line">mse = mean_squared_error(y_test, y_pred)</span><br><span class="line">rmse = np.sqrt(mse)</span><br><span class="line">r2 = r2_score(y_test, y_pred)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在图上添加评估指标</span></span><br><span class="line">plt.text(<span class="number">0.05</span>, <span class="number">0.95</span>, <span class="string">f&#x27;R² = <span class="subst">&#123;r2:<span class="number">.4</span>f&#125;</span>\nRMSE = <span class="subst">&#123;rmse:<span class="number">.2</span>f&#125;</span>&#x27;</span>, </span><br><span class="line">         transform=plt.gca().transAxes, verticalalignment=<span class="string">&#x27;top&#x27;</span>,</span><br><span class="line">         bbox=<span class="built_in">dict</span>(boxstyle=<span class="string">&#x27;round&#x27;</span>, facecolor=<span class="string">&#x27;wheat&#x27;</span>, alpha=<span class="number">0.8</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 子图2：残差图</span></span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">residuals = y_test - y_pred</span><br><span class="line">plt.scatter(y_pred, residuals, alpha=<span class="number">0.7</span>, color=<span class="string">&#x27;green&#x27;</span>)</span><br><span class="line">plt.axhline(y=<span class="number">0</span>, color=<span class="string">&#x27;red&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, linewidth=<span class="number">2</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Predicted Values&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Residuals&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Residual Plot&#x27;</span>)</span><br><span class="line">plt.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 调整布局并显示</span></span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/images%5Coutput_29_0.png" alt="结果"></p>
+<p>R²到了0.95，比上一个更好，从图像上看也是线性的，看来研发支出、市场支出要更好一些，这次的任务就到这里了</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2026/01/01/work_class/" data-id="cuidWZwUhPwC5qGeRzfehxQn8" data-title="" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/01/01/%E6%95%B0%E6%8D%AE02/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/01/01/My-first-post/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">My first post</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/01/">January 2026</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2026/01/01/%E6%95%B0%E6%8D%AE02/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2026/01/01/work_class/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2026/01/01/My-first-post/">My first post</a>
+          </li>
+        
+          <li>
+            <a href="/2026/01/01/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2026 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
