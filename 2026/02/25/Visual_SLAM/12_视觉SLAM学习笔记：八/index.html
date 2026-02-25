@@ -1,0 +1,298 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>视觉SLAM学习笔记：八 | Pumpkin's Blogs</title><meta name="author" content="pumpkin-db"><meta name="copyright" content="pumpkin-db"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="第十一、十二章回环检测回环检测的意义：前端（视觉里程计）和后端（优化）会导致累积误差，使得长期地图和轨迹不准确。回环检测通过识别相机是否回到曾经经过的位置，为后端提供额外的、非相邻的约束，从而有效消除累积误差，实现全局一致性。 回环检测的主流方法：  基于外观的方法：不依赖前端和后端的位姿估计，直接根据两幅图像的相似性判断。由于摆脱了累积误差的影响，成为主流方法。 其他方法包括理论上“朴素”的任意">
+<meta property="og:type" content="article">
+<meta property="og:title" content="视觉SLAM学习笔记：八">
+<meta property="og:url" content="https://pumpkin-db.github.io/2026/02/25/Visual_SLAM/12_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%85%AB/index.html">
+<meta property="og:site_name" content="Pumpkin&#39;s Blogs">
+<meta property="og:description" content="第十一、十二章回环检测回环检测的意义：前端（视觉里程计）和后端（优化）会导致累积误差，使得长期地图和轨迹不准确。回环检测通过识别相机是否回到曾经经过的位置，为后端提供额外的、非相邻的约束，从而有效消除累积误差，实现全局一致性。 回环检测的主流方法：  基于外观的方法：不依赖前端和后端的位姿估计，直接根据两幅图像的相似性判断。由于摆脱了累积误差的影响，成为主流方法。 其他方法包括理论上“朴素”的任意">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://pumpkin-db.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2026-02-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-25T13:03:52.650Z">
+<meta property="article:author" content="pumpkin-db">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="SLAM">
+<meta property="article:tag" content="cpp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pumpkin-db.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "视觉SLAM学习笔记：八",
+  "url": "https://pumpkin-db.github.io/2026/02/25/Visual_SLAM/12_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%85%AB/",
+  "image": "https://pumpkin-db.github.io/img/butterfly-icon.png",
+  "datePublished": "2026-02-24T16:00:00.000Z",
+  "dateModified": "2026-02-25T13:03:52.650Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "pumpkin-db",
+      "url": "https://pumpkin-db.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://pumpkin-db.github.io/2026/02/25/Visual_SLAM/12_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%85%AB/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '视觉SLAM学习笔记：八',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> home</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> tags</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> about</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Pumpkin's Blogs</span></a><a class="nav-page-title" href="/"><span class="site-name">视觉SLAM学习笔记：八</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> home</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> tags</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> about</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">视觉SLAM学习笔记：八</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-02-24T16:00:00.000Z" title="Created 2026-02-25 00:00:00">2026-02-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-02-25T13:03:52.650Z" title="Updated 2026-02-25 21:03:52">2026-02-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%A7%86%E8%A7%89SLAM/">视觉SLAM</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="第十一、十二章"><a href="#第十一、十二章" class="headerlink" title="第十一、十二章"></a>第十一、十二章</h1><h2 id="回环检测"><a href="#回环检测" class="headerlink" title="回环检测"></a>回环检测</h2><p><strong>回环检测的意义</strong>：前端（视觉里程计）和后端（优化）会导致累积误差，使得长期地图和轨迹不准确。回环检测通过识别相机是否回到曾经经过的位置，为后端提供额外的、非相邻的约束，从而有效消除累积误差，实现全局一致性。</p>
+<p><strong>回环检测的主流方法</strong>：</p>
+<ul>
+<li><strong>基于外观的方法</strong>：不依赖前端和后端的位姿估计，直接根据两幅图像的相似性判断。由于摆脱了累积误差的影响，成为主流方法。</li>
+<li>其他方法包括理论上“朴素”的任意图像匹配（复杂度高）和基于里程计的几何关系（存在循环论证问题，误差大时失效）</li>
+</ul>
+<p><strong>基于词袋模型（Bag-of-Words， BoW）的回环检测</strong>：</p>
+<ul>
+<li><strong>核心思想</strong>：用“图像包含哪些视觉单词”的直方图向量来描述图像，通过比较这些向量的相似度来检测回环。</li>
+<li><strong>步骤</strong>：<ul>
+<li><strong>字典生成</strong>：对大量图像提取特征点（如ORB），使用K-means等聚类算法将特征点聚合成“视觉单词”，并组织成k叉树结构以实现快速查找。</li>
+<li><strong>图像描述</strong>：对单张图像提取特征点，并在字典树中查找每个特征对应的单词，形成TF-IDF加权的词袋向量。</li>
+<li><strong>相似度计算</strong>：比较两幅图像对应的词袋向量，计算相似度评分</li>
+</ul>
+</li>
+</ul>
+<p>整个回环检测的意义是很好理解的，具体的做法就是传统的基于外观的方法，它没有利用任何的几何信息，所以一般都需要一个验证步骤，具体验证的内容书中说了两种，第一是建立缓存机制，认为单次检测到的回环不足以构成良好的约束，而在一段时间中已知检测到的回环，才是正确的回环；第二，对回环检测到的两帧进行特征匹配，估计相机的运动，然后，把运动放到之前的位姿图中，检查与之前的估计是否有较大的出入。</p>
+<p>再重新捋一遍书中关于整个回环检测的流程，首先是要用外观方法进行回环检测，然后介绍了基于词袋模型的回环检测，先使用K叉树的结构创建字典（利用ORB特征），然后在使用TF-IDF进行相似度计算得到结果。<br>最后是结果分析，看看哪些部分可以优化，通过增加字典的规模，再取先验相似度以增强鲁棒性，在关键帧的处理中采用稀疏的帧，即彼此间不太相同，又能涵盖整个环境，最后就是之前已经提到过的验证。</p>
+<h2 id="建图"><a href="#建图" class="headerlink" title="建图"></a>建图</h2><p>主旨是：SLAM不仅是为了定位，更是为了构建能服务于不同应用（如导航、避障、交互）的地图。文章重点从“稀疏特征点地图”扩展到“稠密地图”。</p>
+<p>文章的核心概念与流程可总结如下：</p>
+<p><strong>1. 为什么需要稠密地图？</strong></p>
+<p>稀疏特征点地图（如几个桌角）能满足定位，但无法用于需要知道“面”信息的任务，如<strong>导航、避障、三维重建和增强现实交互</strong>。这些任务需要知道环境中每个看到的部分，即<strong>稠密地图</strong>。</p>
+<p><strong>2. 如何用单目相机做稠密重建？（核心难点与方案）</strong></p>
+<p>单目相机无法直接测距，文章介绍了经典的<strong>立体视觉</strong>思路：</p>
+<ul>
+<li><strong>核心问题</strong>：如何为第一张图的每个像素在其他图像中找到对应点？</li>
+<li><strong>解决方案</strong>：<ul>
+<li><strong>极线搜索</strong>：利用相机运动几何，将对应点的搜索范围从整张图缩小到一条线（极线）上。</li>
+<li><strong>块匹配</strong>：比较像素周围的小图像块（而非单个像素）的相似度（如用NCC算法），在极线上找到最匹配的点。</li>
+<li><strong>深度滤波器</strong>：单次匹配不可靠。文章引入<strong>概率模型</strong>，将每个像素的深度视为一个服从高斯分布的状态。通过不断融入新的图像观测，像滤波器一样更新深度的<strong>均值（估计值）和方差（不确定性）</strong>，使其从初始猜测逐渐收敛到稳定值。这个过程就是“深度估计”。</li>
+</ul>
+</li>
+</ul>
+<p><strong>3. 单目稠密重建的实践与局限性</strong></p>
+<p>文章提供了一个实践程序，演示了上述流程，并指出了关键问题</p>
+<ul>
+<li><strong>对纹理依赖性强</strong>：在缺乏纹理的均匀区域（如白墙），块匹配容易失败。</li>
+<li><strong>计算量大</strong>：每个像素都需独立进行极线搜索和滤波，非常耗时。</li>
+<li><strong>改进方向</strong>：文章讨论了使用<strong>逆深度</strong>参数化、考虑图像仿射变换、以及利用<strong>GPU并行计算</strong>来提升鲁棒性和效率。</li>
+</ul>
+<p><strong>4. 更实用的方案：RGB-D稠密建图</strong></p>
+<p>相较于“费力不讨好”的单目稠密估计，使用RGB-D相机直接获取深度是更高效可靠的选择。文章介绍了由此生成的几种地图形式</p>
+<ul>
+<li><strong>点云地图</strong>：最基本的形式，将深度图转换成三维点并拼接。需进行<strong>滤波</strong>（如体素网格滤波）来降采样和去噪。</li>
+<li><strong>八叉树地图</strong>：一种<strong>高效压缩、概率化、支持动态更新</strong>的地图。它将空间递归划分为体素，每个体素存储“被占据”的概率。其优势是：<ul>
+<li><strong>存储空间极小</strong>（可比点云小99%以上）。</li>
+<li>支持<strong>多分辨率查询</strong>和<strong>概率更新</strong>，能融合多次观测并处理动态变化。</li>
+<li>可直接用于<strong>机器人导航和避障</strong>的空间查询。</li>
+</ul>
+</li>
+<li><strong>表面重建</strong>（网格&#x2F;面片）：在点云基础上重建出物体表面，更美观，适合可视化与人机交互。</li>
+</ul>
+<p><strong>5. 高级方向预览</strong><br>文章最后简要提到了以<strong>重建</strong>为核心、依赖GPU并行计算的<strong>实时三维重建</strong>方向（如KinectFusion），其使用<strong>TSDF</strong>等结构能构建出非常精细、无缝的三维模型。</p>
+<p><strong>总结</strong>：文章系统阐述了从<strong>单目深度估计的原理与实践</strong>，到<strong>利用RGB-D传感器构建各种实用地图（点云、八叉树、表面） 的全链条知识，指明了稠密建图是实现SLAM高级应用的关键</strong></p>
+<p>（AI太好用了你知道吗）<br>赶时间，这部分内容就用AI代替了。</p>
+<p>简单总结一下，建图就是为了构建稠密地图，以满足<strong>导航、避障、三维重建和增强现实交互</strong>等需求。接着就是看具体的做法了，本文中介绍了单目和RGB-D两种方法，单目看看就可以了，它需要根据几何信息一点点的去测每个像素的深度，计算量大，速度慢，效果还差，对纹理的依赖强。所以不用它，只要知道大概是一种通过位姿找到极线，再使用深度滤波器一次次迭代找到深度的方法就可以了。</p>
+<p>对于RGB-D，深度信息直接得到，作者接着介绍了两种地图形式，点云地图和八叉树地图。<br>点云就是空间离散的点组成的图，得到后再经过体素滤波减少冗余点就成为了点云地图，不过，想要能够满足定位、导航、可视化、交互的需求，还需要进一步生成网络模型，网络重建后，原本没有表面信息的点云就可以构建出法线、纹理等信息了。</p>
+<p>令一种八叉树地图就是把一个大方块沿三个表面对半分，分成8块。每块中限制有多少个点，和体素滤波有点像，但是它的压缩程度很强，书中的例子是原本6.9MB的点云地图文件，改用八叉树就变成了56KB。总之八叉树就是一颗非均匀的、带概率的体素树，压缩率高，便于更新和查询。关键地解决了点云地图数据量大和不能去除动态物体的问题。</p>
+<p>实时三维重建的内容书里说的不多，也没有什么实践，这里也不说了。</p>
+<p>放个八叉树图在这吧。<br><img src="/.images/Visual_SLAM/ch11&ch12/%E5%85%AB%E5%8F%89%E6%A0%91.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://pumpkin-db.github.io">pumpkin-db</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://pumpkin-db.github.io/2026/02/25/Visual_SLAM/12_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%85%AB/">https://pumpkin-db.github.io/2026/02/25/Visual_SLAM/12_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%85%AB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/SLAM/">SLAM</a><a class="post-meta__tags" href="/tags/cpp/">cpp</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/02/24/Visual_SLAM/11_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%B8%83/" title="视觉SLAM学习笔记：七"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">视觉SLAM学习笔记：七</div></div><div class="info-2"><div class="info-item-1">第九、十章后端贝叶斯公式在正式开始之前，需要复习一下贝叶斯公式，基本的形式是 $$P(X | Y)=\frac{P(XY)}{P(Y)}$$ 之后需要用到一个进阶的式子：$$P(A|B,C)=\frac{P(B|A,C) \cdot P(A|C)}{P(B|C)}$$下面来证明这个式子：首先假设事件$D$：已知$C$然后得到：$$P(A|B,C)=P(A|B,D)$$把$BD$看作整体，使用最基础的贝叶斯公式，得到：$$P(A|B,D)=\frac{P(B,D|A) \cdot P(A)}{P(B,D)}$$现在把$D$换回$C$，唯一需要特殊处理的是分子的第二项：$P(A)$，这里有个技巧，就是在整个推导过程中，$C$始终是已知的背景，所以$P(A)$其实隐含了“在已知$C$的前提下”，所以应该写为$P(A|C)$，或者从另一种视角来看，在机器人模型中，一般认为$C$(历史信息)和$A$(当前状态)是独立的，同样可以得到$P(A)=P(A|C)$ 综上，式子变为：$$P(A|B,C)=\frac{P(B,C|A) \cdot P(A|C) }{P(B,C)}$$对分母使用贝叶斯...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/02/04/Visual_SLAM/07_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%B8%89/" title="视觉SLAM学习笔记：三"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-04</div><div class="info-item-2">视觉SLAM学习笔记：三</div></div><div class="info-2"><div class="info-item-1">第四章李群和李代数群群（Group）是一种集合加上一种运算的代数结构若集合记作$A$,运算记作$\cdot$,那么群就可以记作$G=(A,\cdot)$这个运算需要满足以下条件：   封闭性： $\forall a_{1},a_{2}\in A, a_{1} \cdot a_{2}\in A$    结合率： $\forall a_{1},a_{2},a_{3}\in A,(a_{1}\cdot a_{2})\cdot a_{3}=a_{1}\cdot (a_{2}\cdot a_{3})$    幺元： $\exists a_{0} \in A,$   $s.t.$    $a\cdot a^{-1}=a_{0}$    逆： $\forall a\in A,\exists a^{-1} \in A$,  $s.t.$   $a\cdot a^{-1}=a_{0}$    可以记为：“凤姐咬你” $SO(3)与SE(3)$三维旋转矩阵构成特殊正交群(Special Orthogonal Group)$SO(3)$变换矩阵构成特殊欧氏群(Special Euclidean Gro...</div></div></div></a><a class="pagination-related" href="/2026/02/02/Visual_SLAM/06_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BA%8C/" title="视觉SLAM学习笔记：二"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-02</div><div class="info-item-2">视觉SLAM学习笔记：二</div></div><div class="info-2"><div class="info-item-1">第三章旋转矩阵，变换矩阵（冗余）这章前面部分都在介绍数学原理 具体内容直接看书，这里说一个有意思的东西： 假设 $$T_{RW}=\left[\begin{matrix}R & t \\ \mathbf{0}^T & {1}\end{matrix}\right] $$  然后 $$T_{WR}=T_{RW}^{-1}=\left[\begin{matrix} R^T & -R^Tt\\\mathbf{0}^T &  1 \end{matrix}\right]$$ 我想要画出相机的运动轨迹，即把相机中心坐标点连接起来，请问：在这两个矩阵中，哪个矩阵的平移向量是相机中心坐标？ 答案是$T_{WR}$的平移向量是相机的中心坐标，即$-R^Tt$很容易推导，我们先理解一下题意，所谓的相机中心坐标其实就是机器人坐标系的原点，即$p_{R}&#x3D;0$，我们只需要求$p_{W}$就可以了，那么根据公式：$$p_{W}&#x3D;T_{WR}p_{R}$$带入计算：$$T_{WR}p_{R}=\left[\begin{matrix}  R^T & -R^Tt\\\mathbf{0}^T &...</div></div></div></a><a class="pagination-related" href="/2026/02/13/Visual_SLAM/10_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%85%AD/" title="视觉SLAM学习笔记：六"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-13</div><div class="info-item-2">视觉SLAM学习笔记：六</div></div><div class="info-2"><div class="info-item-1">第七章、第八章视觉里程计(VIO-Visual Odometry)特征点法特征点：由关键点和描述子组成关键点选角点（像素灰度变化明显的地方），描述子：描述了周围像素的信息，按照“外观相似的特征应该有相似的描述子”设计的 ORB(Oriented FAST and Rotated BRIEF)特征ORB的关键点是Oriented FAST描述子是Rotated BRIEF FAST特征点仅仅比较像素之间亮度的差异ORB添加了尺度和旋转的描述，尺度不变性依靠构建图像金字塔，并在金字塔的每一层上检测角点实现的，特征的旋转是通过**灰度质心法(Intensity Centroid)**实现的 图像金字塔金字塔是指通过对图像进行不同层次的降采样，以获得不同分辨率的图像灰度质心法(Intensity Centroid)在一小块图像B中，定义图像块的矩为：$$m_{pq}=\sum_{x,y \in B} x^p y^q I(x,y),\;\;\;\;\;\;\;p,q=\{0,1\}$$通过矩可以找到图像块的质心：$$C=\left(\frac{m_{{10}}}{m_{00}}, \fra...</div></div></div></a><a class="pagination-related" href="/2026/02/07/Visual_SLAM/09_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BA%94/" title="视觉SLAM学习笔记：五"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-07</div><div class="info-item-2">视觉SLAM学习笔记：五</div></div><div class="info-2"><div class="info-item-1">矩阵求导标量函数对向量求导 向量函数对向量求导 常用公式： 线性变换$$\frac{\partial Ax}{\partial x^{T}}=A$$ 恒等变换$$\frac{\partial x}{\partial x^{T}}=I$$ 零矩阵，a为常数向量$$\frac{\partial a}{\partial x^{T}}=0$$ 梯度行向量($a^{T}x$是标量)$$\frac{\partial a^{T}x}{\partial x^{T}}=a^{T}$$ 和$$\frac{\partial x^T a}{\partial x^{T}}=a^{T}$$ 二次型梯度($x^{T}Ax$是标量)$$\frac{\partial x^{T} A x}{\partial x^{T}}=x^{T}(A+A^{T})$$ 链式法则：若$z=f(y),y=g(x)$，则：$$\frac{\partial z}{\partial x^{T}}=\frac{\partial z}{\partial y^{T}}\cdot \frac{\partial y}{\partial x^{T}}...</div></div></div></a><a class="pagination-related" href="/2026/02/24/Visual_SLAM/11_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%B8%83/" title="视觉SLAM学习笔记：七"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-24</div><div class="info-item-2">视觉SLAM学习笔记：七</div></div><div class="info-2"><div class="info-item-1">第九、十章后端贝叶斯公式在正式开始之前，需要复习一下贝叶斯公式，基本的形式是 $$P(X | Y)=\frac{P(XY)}{P(Y)}$$ 之后需要用到一个进阶的式子：$$P(A|B,C)=\frac{P(B|A,C) \cdot P(A|C)}{P(B|C)}$$下面来证明这个式子：首先假设事件$D$：已知$C$然后得到：$$P(A|B,C)=P(A|B,D)$$把$BD$看作整体，使用最基础的贝叶斯公式，得到：$$P(A|B,D)=\frac{P(B,D|A) \cdot P(A)}{P(B,D)}$$现在把$D$换回$C$，唯一需要特殊处理的是分子的第二项：$P(A)$，这里有个技巧，就是在整个推导过程中，$C$始终是已知的背景，所以$P(A)$其实隐含了“在已知$C$的前提下”，所以应该写为$P(A|C)$，或者从另一种视角来看，在机器人模型中，一般认为$C$(历史信息)和$A$(当前状态)是独立的，同样可以得到$P(A)=P(A|C)$ 综上，式子变为：$$P(A|B,C)=\frac{P(B,C|A) \cdot P(A|C) }{P(B,C)}$$对分母使用贝叶斯...</div></div></div></a><a class="pagination-related" href="/2026/02/06/Visual_SLAM/08_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%9B%9B/" title="视觉SLAM学习笔记：四"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-06</div><div class="info-item-2">视觉SLAM学习笔记：四</div></div><div class="info-2"><div class="info-item-1">第五章相机模型针孔相机模型  畸变模型 单目相机成像过程 双目相机模型 RGB-D相机模型 习题内参就是个$K$：$$K=\left[\begin{matrix} f_{x} & 0 & c_{x} \\ 0 & f_{y} & c_{y} \\ 0 & 0 & 1 \end{matrix}\right]$$如果相机的分辨率变为原来的两倍，那么$u$和$v$就会变成原来的两倍，由于：$$Z \left[\begin{matrix} u \\ v \\ 1 \end{matrix} \right]= \left[\begin{matrix} f_{x} & 0 & c_{x} \\ 0 & f_{y} & c_{y} \\ 0 & 0 & 1 \end{matrix}\right] \left[\begin{matrix} X \\ Y \\ Z \end{matrix}\right]$$故$$Z \left[\begin{matrix} 2u \\ 2v \\ 1 \end{matrix} \right]= \left[\begin{matrix} 2f_{x} & 0 & 2c...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">pumpkin-db</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/pumpkin-db/pumpkin-db.github.io"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog. I will try my best to do this.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E3%80%81%E5%8D%81%E4%BA%8C%E7%AB%A0"><span class="toc-number">1.</span> <span class="toc-text">第十一、十二章</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9E%E7%8E%AF%E6%A3%80%E6%B5%8B"><span class="toc-number">1.1.</span> <span class="toc-text">回环检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E5%9B%BE"><span class="toc-number">1.2.</span> <span class="toc-text">建图</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/25/Visual_SLAM/12_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%85%AB/" title="视觉SLAM学习笔记：八">视觉SLAM学习笔记：八</a><time datetime="2026-02-24T16:00:00.000Z" title="Created 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/24/Visual_SLAM/11_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%B8%83/" title="视觉SLAM学习笔记：七">视觉SLAM学习笔记：七</a><time datetime="2026-02-23T16:00:00.000Z" title="Created 2026-02-24 00:00:00">2026-02-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/13/Visual_SLAM/10_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%85%AD/" title="视觉SLAM学习笔记：六">视觉SLAM学习笔记：六</a><time datetime="2026-02-12T16:00:00.000Z" title="Created 2026-02-13 00:00:00">2026-02-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/07/Visual_SLAM/09_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BA%94/" title="视觉SLAM学习笔记：五">视觉SLAM学习笔记：五</a><time datetime="2026-02-06T16:00:00.000Z" title="Created 2026-02-07 00:00:00">2026-02-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/06/Visual_SLAM/08_%E8%A7%86%E8%A7%89SLAM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%9B%9B/" title="视觉SLAM学习笔记：四">视觉SLAM学习笔记：四</a><time datetime="2026-02-05T16:00:00.000Z" title="Created 2026-02-06 00:00:00">2026-02-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By pumpkin-db</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
